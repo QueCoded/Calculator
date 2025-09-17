@@ -1,10 +1,10 @@
-// Holds every user entry (for the main table)
+// Tracks all entries
 let record = [];
 
-// Holds only valid numeric outputs (for summary stats)
+// Only numnbers no invalid values
 let validResults = [];
 
-// Main input loop (runs until user cancels)
+// Keep prompting for two numbers and operation until user clicks cancel
 let promptLoop = true;
 while (promptLoop) {
   let first = prompt("Enter first number (x):");
@@ -20,14 +20,14 @@ while (promptLoop) {
   let x = parseFloat(first);
   let y = parseFloat(second);
 
-  // Validate numbers first
+  // Make sure number entries are numerical values
   if (isNaN(x) || isNaN(y)) {
     output = "<span class='error'>Invalid number</span>";
   } else if (!["+", "-", "*", "/", "%"].includes(op)) {
     // Check operator validity
     output = "<span class='error'>Invalid operator</span>";
   } else {
-    // Perform operation
+    // Execute operation
     if (op === "+") output = x + y;
     else if (op === "-") output = x - y;
     else if (op === "*") output = x * y;
@@ -35,16 +35,15 @@ while (promptLoop) {
     else if (op === "%") output = (y !== 0) ? x % y : "<span class='error'>Division by zero</span>";
   }
 
-  // Add this calculation attempt to history
   record.push({ first, op, second, output });
 
-  // Keep only valid numbers for later stats
+  // Results only hold correctly executed operations
   if (typeof output === "number" && !isNaN(output)) {
     validResults.push(output);
   }
 }
 
-// Build main results table
+// Build results table
 document.write("<table>");
 document.write("<tr><th>x</th><th>op</th><th>y</th><th>result</th></tr>");
 record.forEach(entry => {
@@ -52,7 +51,7 @@ record.forEach(entry => {
 });
 document.write("</table>");
 
-// Build summary table based on only valid computations
+// Build summary table excluding the invalid operations based on validResults
 if (validResults.length > 0) {
   let minVal = Math.min(...validResults);
   let maxVal = Math.max(...validResults);
